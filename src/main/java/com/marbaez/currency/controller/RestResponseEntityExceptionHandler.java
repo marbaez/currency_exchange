@@ -22,22 +22,23 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ResponseBody
     protected ResponseEntity<Object> handleNotFoundResourceException(NotFoundResourceException ex, WebRequest request) {
-    	ErrorMessage errorMessage = new ErrorMessage(ex.getMessage(), HttpStatus.NOT_FOUND);
-    	//return new ResponseEntity<Object>(errorMessage, HttpStatus.NOT_FOUND);
-    	return handleExceptionInternal(ex, errorMessage, 
-    	          new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    	return handleError(ex, HttpStatus.NOT_FOUND, request);
         
     }
     
     @ExceptionHandler(value = { ExchangeServiceException.class })
-    protected ResponseEntity<Object> handleConflictCurrencyExchange(ExchangeServiceException ex, WebRequest request) {
-    	ErrorMessage errorMessage = new ErrorMessage(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        return handleExceptionInternal(ex, errorMessage, 
-          new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    protected @ResponseBody ResponseEntity<Object> handleConflictCurrencyExchange(ExchangeServiceException ex, WebRequest request) {
+        return handleError(ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
     
     @ExceptionHandler(value = { ValidationException.class })
-    protected ResponseEntity<Object> handleConflictCurrencyExchange(ValidationException ex, WebRequest request) {
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    protected @ResponseBody ResponseEntity<Object> handleConflictCurrencyExchange(ValidationException ex, WebRequest request) {
+    	return handleError(ex, HttpStatus.BAD_REQUEST, request);
+    }
+    
+    private ResponseEntity<Object> handleError(Exception ex, HttpStatus status, WebRequest request) {
     	ErrorMessage errorMessage = new ErrorMessage(ex.getMessage(), HttpStatus.BAD_REQUEST);
         return handleExceptionInternal(ex, errorMessage, 
           new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
