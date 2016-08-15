@@ -29,7 +29,7 @@ public class ExchangeController {
 	private CurrenciesRatesService currenciesRatesService;	
 	
 	@RequestMapping(
-			value = "/multiple",
+			value = "/exchanges",
 			method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<List<CurrencyChange>> exchange(
