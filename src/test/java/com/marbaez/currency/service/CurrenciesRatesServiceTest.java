@@ -74,4 +74,11 @@ public class CurrenciesRatesServiceTest {
         assertThat(result.get(0).getDestinationCurrency()).isEqualTo(destinationCountryCurreciesList[0]);
     }
 
+    @Test(
+            expected = ExchangeServiceException.class)
+    public void testFailureInExchangeRequestByUnknownCountry() {
+        currenciesRatesService.currenciesChangesForBaseCountry(wrongCountry,
+                goodDestinationCountry);
+    }
+
 }
