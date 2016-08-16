@@ -23,56 +23,64 @@ import com.marbaez.currency.service.CurrenciesRatesService;
 @RestController
 public class ExchangeController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ExchangeController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExchangeController.class);
 
-	@Autowired
-	private CurrenciesRatesService currenciesRatesService;	
-	
-	@RequestMapping(
-			value = "/exchanges",
-			method = RequestMethod.GET)
-	@ResponseBody
-	public ResponseEntity<List<CurrencyChange>> exchange(
-			@RequestParam(value="base", defaultValue="ESP", required = false) String base, 
-			@RequestParam(value = "destination", required = false) String[] destinations) throws ExchangeServiceException, ValidationException {
-		
-		//validación de los parámetros de entrada
-		validateExchangeRequestParameters(base, destinations);
-		
-		return new ResponseEntity<List<CurrencyChange>>(
-				currenciesRatesService.currenciesChangesForBaseCountry(base, destinations),
-				HttpStatus.OK);
-	}
-	
-	private void validateExchangeRequestParameters(String base, String[] destinations) throws ValidationException {
-		
-		//validamos el cód. del país de la moneda de origen
-		validateAlpha3CountryCode(base);
-		
-		if (destinations == null || destinations.length < 1) {
-			throw new ValidationException("Se debe indicar al menos un código de país destino");
-		} else {
-			for (String code: destinations) {
-				validateAlpha3CountryCode(code);
-			}
-		}
-		
-	}
-	
-	
-	/**
-	 * Validamos que el parámetro de entrada sea una cadena de caracteres de longitud 3
-	 * @param code
-	 * @throws ValidationException
-	 */
-	private void validateAlpha3CountryCode(String code) throws ValidationException {
-		String patternString = "^[a-zA-ZñÑ]{3}$";
-		Pattern pattern = Pattern.compile(patternString);
-		Matcher matcher = pattern.matcher(code);
-		
-		if (!matcher.matches()) {
-			throw new ValidationException("[" + code + "] no es un código de país válido.");
-		}
-	}
-	
+    @Autowired
+    private CurrenciesRatesService currenciesRatesService;
+
+    @Autowired
+    private Pattern pattern;
+
+    @RequestMapping(
+            value = "/exchanges",
+            method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<List<CurrencyChange>> exchange(
+            @RequestParam(
+                    value = "base",
+                    defaultValue = "ESP",
+                    required = false) final String base,
+            @RequestParam(
+                    value = "destination",
+                    required = false) final String[] destinations)
+                            throws ExchangeServiceException, ValidationException {
+
+        //validación de los parámetros de entrada
+        validateExchangeRequestParameters(base, destinations);
+
+        return new ResponseEntity<List<CurrencyChange>>(
+                currenciesRatesService.currenciesChangesForBaseCountry(base, destinations),
+                HttpStatus.OK);
+    }
+
+    private void validateExchangeRequestParameters(final String base, final String[] destinations)
+            throws ValidationException {
+
+        //validamos el cód. del país de la moneda de origen
+        validateAlpha3CountryCode(base);
+
+        if ((destinations == null) || (destinations.length < 1)) {
+            throw new ValidationException("Se debe indicar al menos un código de país destino");
+        } else {
+            for (final String code : destinations) {
+                validateAlpha3CountryCode(code);
+            }
+        }
+
+    }
+
+    /**
+     * Validamos que el parámetro de entrada sea una cadena de caracteres de longitud 3
+     * @param code
+     * @throws ValidationException
+     */
+    private void validateAlpha3CountryCode(final String code) throws ValidationException {
+
+        final Matcher matcher = pattern.matcher(code);
+
+        if (!matcher.matches()) {
+            throw new ValidationException("[" + code + "] no es un código de país válido.");
+        }
+    }
+
 }

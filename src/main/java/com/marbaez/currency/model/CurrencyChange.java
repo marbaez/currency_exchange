@@ -11,33 +11,32 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  */
 @JsonPropertyOrder({ "base", "destination", "rate" })
 public class CurrencyChange {
-	
-	private final String originCurrency;
-	
-	private final String destinationCurrency;
-	
-	private final Double exchangeRate;
 
+    private final String originCurrency;
 
-	public CurrencyChange(long id, String originCurrency, String destinationCurrency, Double exchangeRate) {
-		this.originCurrency = originCurrency;
-		this.destinationCurrency = destinationCurrency;
-		this.exchangeRate = exchangeRate;
-	}
+    private final String destinationCurrency;
 
-	@JsonGetter("base_currency")
-	protected String getOriginCurrency() {
-		return originCurrency;
-	}
+    private final Double exchangeRate;
 
-	@JsonGetter("destination_currency")
-	protected String getDestinationCurrency() {
-		return destinationCurrency;
-	}
+    public CurrencyChange(final String originCurrency, final String destinationCurrency, final Double exchangeRate) {
+        this.originCurrency = originCurrency;
+        this.destinationCurrency = destinationCurrency;
+        this.exchangeRate = exchangeRate;
+    }
 
-	@JsonGetter("exchange_rate")
-	protected Double getExchangeRate() {
-		return exchangeRate;
-	}
-	
+    @JsonGetter("base_currency")
+    public String getOriginCurrency() {
+        return originCurrency;
+    }
+
+    @JsonGetter("destination_currency")
+    public String getDestinationCurrency() {
+        return destinationCurrency;
+    }
+
+    @JsonGetter("exchange_rate")
+    public Double getExchangeRate() {
+        return exchangeRate;
+    }
+
 }

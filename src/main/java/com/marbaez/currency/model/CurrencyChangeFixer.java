@@ -1,11 +1,8 @@
 package com.marbaez.currency.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.stereotype.Component;
 
 /**
  * Clase para mapear la respuesta de la API
@@ -14,55 +11,54 @@ import org.springframework.stereotype.Component;
  */
 public class CurrencyChangeFixer {
 
-	/**
-	 * Moneda origen
-	 */
-	private String base;
-	
-	/**
-	 * Representa una lista de pares <moneda,tipo de cambio>
-	 */
-	private Map<String,Double> rates;
-	
-	
-	public CurrencyChangeFixer(String base, Map<String, Double> rates) {
-		super();
-		this.base = base;
-		this.rates = rates;
-	}
+    /**
+     * Moneda origen
+     */
+    private String base;
 
-	public CurrencyChangeFixer() {
-		super();
-	}
+    /**
+     * Representa una lista de pares <moneda,tipo de cambio>
+     */
+    private Map<String, Double> rates;
 
-	protected String getBase() {
-		return base;
-	}
+    public CurrencyChangeFixer(final String base, final Map<String, Double> rates) {
+        super();
+        this.base = base;
+        this.rates = rates;
+    }
 
-	protected void setBase(String base) {
-		this.base = base;
-	}
+    public CurrencyChangeFixer() {
+        super();
+    }
 
-	protected Map<String, Double> getRates() {
-		return rates;
-	}
+    protected String getBase() {
+        return base;
+    }
 
-	protected void setRates(Map<String, Double> rates) {
-		this.rates = rates;
-	}
+    protected void setBase(final String base) {
+        this.base = base;
+    }
 
-	@Override
-	public String toString() {
-		return "CurrencyChangeFixer [base=" + base + ", rates=" + rates + "]";
-	}
-	
-	public List<CurrencyChange> convertToCurrencyChange() {
-		List<CurrencyChange> result = new ArrayList<CurrencyChange>();
-		
-		for (String currency : rates.keySet()) {
-			result.add( new CurrencyChange(1, this.base, currency, rates.get(currency)));
-		}
-		return result;
-	}
-	
+    protected Map<String, Double> getRates() {
+        return rates;
+    }
+
+    protected void setRates(final Map<String, Double> rates) {
+        this.rates = rates;
+    }
+
+    @Override
+    public String toString() {
+        return "CurrencyChangeFixer [base=" + base + ", rates=" + rates + "]";
+    }
+
+    public List<CurrencyChange> convertToCurrencyChange() {
+        final List<CurrencyChange> result = new ArrayList<CurrencyChange>();
+
+        for (final String currency : rates.keySet()) {
+            result.add(new CurrencyChange(this.base, currency, rates.get(currency)));
+        }
+        return result;
+    }
+
 }
