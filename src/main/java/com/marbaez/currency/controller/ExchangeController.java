@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import com.marbaez.currency.error.ExchangeServiceException;
 import com.marbaez.currency.error.ValidationException;
 import com.marbaez.currency.model.CurrencyChange;
 import com.marbaez.currency.service.CurrenciesRatesService;
+import com.marbaez.currency.util.Messages;
 
 @RestController
 public class ExchangeController {
@@ -30,6 +32,9 @@ public class ExchangeController {
 
     @Autowired
     private Pattern pattern;
+    
+    @Autowired
+	private Messages messages;
 
     @RequestMapping(
             value = "/exchanges",
@@ -60,7 +65,7 @@ public class ExchangeController {
         validateAlpha3CountryCode(base);
 
         if ((destinations == null) || (destinations.length < 1)) {
-            throw new ValidationException("Se debe indicar al menos un código de país destino");
+            throw new ValidationException(messages.getString("validation.destination.country.code"));
         } else {
             for (final String code : destinations) {
                 validateAlpha3CountryCode(code);
@@ -77,9 +82,8 @@ public class ExchangeController {
     private void validateAlpha3CountryCode(final String code) throws ValidationException {
 
         final Matcher matcher = pattern.matcher(code);
-
         if (!matcher.matches()) {
-            throw new ValidationException("[" + code + "] no es un código de país válido.");
+            throw new ValidationException(messages.getString("validation.error.alpha3code", code));
         }
     }
 

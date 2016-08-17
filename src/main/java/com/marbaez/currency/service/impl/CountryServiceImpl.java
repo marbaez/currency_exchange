@@ -2,6 +2,7 @@ package com.marbaez.currency.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
@@ -9,6 +10,7 @@ import org.springframework.web.client.RestOperations;
 import com.marbaez.currency.error.ExchangeServiceException;
 import com.marbaez.currency.model.Country;
 import com.marbaez.currency.service.CountryService;
+import com.marbaez.currency.util.Messages;
 
 @Service
 public class CountryServiceImpl implements CountryService {
@@ -18,6 +20,9 @@ public class CountryServiceImpl implements CountryService {
 
     @Autowired
     private RestOperations rest;
+    
+    @Autowired
+    private Messages messages;
 
     protected void setCountriesApiURL(final String countriesApiURL) {
         this.countriesApiURL = countriesApiURL;
@@ -31,7 +36,7 @@ public class CountryServiceImpl implements CountryService {
             return country;
         } catch (final RestClientException rce) {
             throw new ExchangeServiceException(
-                    "Country API could not found info about requested country code -> " + code);
+            		messages.getString("country.api.error", code));
         }
     }
 

@@ -12,6 +12,7 @@ import com.marbaez.currency.error.ExchangeServiceException;
 import com.marbaez.currency.model.CurrencyChange;
 import com.marbaez.currency.model.CurrencyChangeFixer;
 import com.marbaez.currency.service.CurrencyService;
+import com.marbaez.currency.util.Messages;
 
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
@@ -21,6 +22,9 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Autowired
     private RestOperations rest;
+    
+    @Autowired
+    private Messages messages;
 
     protected void setCurrenciesExchangeApiURL(final String currenciesExchangeApiURL) {
         this.currenciesExchangeApiURL = currenciesExchangeApiURL;
@@ -35,10 +39,9 @@ public class CurrencyServiceImpl implements CurrencyService {
             return currencyChange.convertToCurrencyChange();
 
         } catch (final RestClientException rce) {
-            throw new ExchangeServiceException("Currency API could not get requested info about conversions between "
-                    + base + " and destinations currencies: " + destinations);
+            throw new ExchangeServiceException(messages.getString("currency.api.error", base, destinations));
         } catch (final Exception ex) {
-            throw new ExchangeServiceException("Unknow error while calling exchange API");
+            throw new ExchangeServiceException(messages.getString("currency.api.unknow.error"));
         }
     }
 
