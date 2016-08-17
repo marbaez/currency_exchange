@@ -1,4 +1,5 @@
 #Descripción
+API para la consulta del valor de cambio entre monedas de distintos países
 #Instalación
 ##Prerequesitos
 Para poder descargar, instalar y compilar esta aplicación son necesarios los siguientes requerimientos:
